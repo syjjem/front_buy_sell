@@ -1,0 +1,19 @@
+name: "Continuous Deploy"
+on: 
+    workflow_run:
+        workflows: ["push-request"]
+        types: 
+            - completed
+jobs: 
+    pull_and_run_code:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: "Remove container cyclobold123"
+              run: "sudo docker rm -f cyclobold123 || true"
+
+            - name: "Get the code from Docker Hub"
+              run: "sudo docker pull syjjem093/cyclobold123:newest"
+
+            - name: "Run the image as a container"
+              run: "sudo docker run -d -p 80:80 --name cyclobold123 syjjem093/cyclobold123:newest"
